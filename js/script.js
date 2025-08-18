@@ -11,12 +11,11 @@ let tarefas = [];
 // Carrega as tarefas do localStorage e as renderiza na tela
 function carregarTarefas() {
     const dadosSalvos = localStorage.getItem("tarefas");
-
+    
     // Se houver dados salvos, converte de JSON para array
     if (dadosSalvos) {
         tarefas = JSON.parse(dadosSalvos);
     }
-    
     renderizarTarefas();
 }
 
@@ -25,30 +24,51 @@ function salvarTarefas() {
     localStorage.setItem("tarefas", JSON.stringify(tarefas));
 }
 
+function delete_() {
+    const delet = [...document.querySelectorAll(".deletar")]
+    delet.forEach(element => {
+        element.addEventListener("click", (evento) => {
+            let def_ = evento.target.parentNode.parentNode
+
+            let filters = tarefas.find(element => {
+                if(element.id == def_.getAttribute("id")) {
+                    return element
+                }
+            })
+
+            let pos = tarefas.indexOf(filters)
+            tarefas.splice(pos, 1)
+            def_.remove()
+            salvarTarefas()
+            document.getElementsByTagName("strong")[0].innerHTML = tarefas.length
+        })
+    })
+}
+
 // Renderiza todas as tarefas na tela
 function renderizarTarefas() {
     // Limpa o conteúdo atual da lista para evitar duplicatas
     tasks.innerHTML = "";
     
-    let cont = tarefas.length
-    document.getElementsByTagName("strong")[0].innerHTML = cont
-
+    document.getElementsByTagName("strong")[0].innerHTML = tarefas.length
+    
     tarefas.forEach(item => {
         const taskHTML = `
-            <div class="task" id="${item.id}">
-                <span class="ref">
-                    <span>${item.texto}</span>
-                </span>
-                <div id="icons">
-                    <i class="fa-solid fa-circle-check"></i>
-                    <i class="fa-regular fa-circle"></i>
-                    <i class="fa-solid fa-pen"></i>
-                    <i class="fa-solid fa-trash-can"></i>
-                </div>
-            </div>
+        <div class="task" id="${item.id}">
+        <span class="ref">
+        <span>${item.texto}</span>
+        </span>
+        <div id="icons">
+        <i class="fa-solid fa-circle-check"></i>
+        <i class="fa-regular fa-circle"></i>
+        <i class="fa-solid fa-pen"></i>
+        <i class="fa-solid fa-trash-can deletar"></i>
+        </div>
+        </div>
         `;
         tasks.innerHTML += taskHTML;
     });
+    delete_()
 }
 
 // --- Event Listeners ---
@@ -66,7 +86,7 @@ add.addEventListener("click", () => {
 btn_add.addEventListener("click", (evento) => {
     evento.preventDefault();
     const textoTarefa = tarefa.value.trim(); // .trim() remove espaços em branco extras
-
+    
     if (textoTarefa) {
         // Cria um ID único usando a data e hora atual
         const novaTarefa = {
@@ -84,6 +104,8 @@ btn_add.addEventListener("click", (evento) => {
 
 // --- Início do script ---
 // Chama a função para carregar as tarefas quando a página é carregada
+
+//delete_()
 carregarTarefas();
 
 const circles = document.querySelectorAll(".fa-circle")
