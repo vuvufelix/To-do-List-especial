@@ -68,7 +68,48 @@ function renderizarTarefas() {
         `;
         tasks.innerHTML += taskHTML;
     });
+    update_()
     delete_()
+}
+
+function update_() {
+    const fa_pen = [...document.querySelectorAll(".fa-pen")]
+    fa_pen.forEach(element => {
+        element.addEventListener("click", (evento) => {
+
+            let def_ = evento.target.parentNode.parentNode
+            
+            let filters = tarefas.find(element => {
+                if(element.id == def_.getAttribute("id")) {
+                    return element
+                }
+            })
+
+            const textoTarefa = tarefa.value = filters.texto
+
+            if (task_input.style.bottom === "20%") {
+                task_input.style.bottom = "-100%";
+            } else {
+                task_input.style.bottom = "20%";
+            }
+
+            const btn_update = document.querySelector("#btn_update")
+
+            btn_update.addEventListener("click", (evento) => {
+                evento.preventDefault();
+
+                if(filters) {
+
+                    if (textoTarefa) {
+    
+                        filters.texto = textoTarefa
+                        salvarTarefas()
+                    }
+                }
+            })
+
+        })
+    })
 }
 
 // --- Event Listeners ---
@@ -107,6 +148,7 @@ btn_add.addEventListener("click", (evento) => {
 
 //delete_()
 carregarTarefas();
+//update_()
 
 const circles = document.querySelectorAll(".fa-circle")
 const circle = [...circles]
@@ -115,6 +157,15 @@ circle.forEach(check => {
     
     check.addEventListener("click", (evento) => {
         let element_f = evento.target.parentNode.parentNode
+
+        let filters = tarefas.find(element => {
+            if(element.id == element_f.getAttribute("id")) {
+                return element
+            }
+        })
+
+        filters.concluida = true
+
         if(evento.target) {
             evento.target.style.display = "none"
             element_f.querySelector(".fa-circle-check").style.display = "block"
@@ -129,6 +180,15 @@ circle.forEach(check => {
 
     let check_f = check.parentNode
     check_f.querySelector(".fa-circle-check").addEventListener("click", (evento) => {
+        
+        let filters = tarefas.find(element => {
+            if(element.id == check_f.parentNode.getAttribute("id")) {
+                return element
+            }
+        })
+
+        filters.concluida = false
+
         if(evento.target.style.display == "block") {
             evento.target.style.display = "none"
             check_f.querySelector(".fa-circle").style.display = "block"
