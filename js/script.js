@@ -36,7 +36,7 @@ function renderizarTarefas() {
     tarefas.forEach(item => {
         const taskHTML = `
             <div class="task" id="${item.id}">
-                <span>
+                <span class="ref">
                     <span>${item.texto}</span>
                 </span>
                 <div id="icons">
@@ -90,24 +90,32 @@ const circles = document.querySelectorAll(".fa-circle")
 const circle = [...circles]
 
 circle.forEach(check => {
-    //var ele = ""
     
     check.addEventListener("click", (evento) => {
         let element_f = evento.target.parentNode.parentNode
         if(evento.target) {
-            get_star(element_f, evento.target)
             evento.target.style.display = "none"
             element_f.querySelector(".fa-circle-check").style.display = "block"
+            let check_f = check.parentNode.parentNode
+            let inx = [...check_f.querySelector(".ref").children]
+            inx.forEach(element => {
+                element.classList.add("rasp")
+            })
+
         }
     })
 
-    function get_star(valor, ele) {
-        valor.addEventListener("click", (evento) => {
-            if(evento.target) {
-                evento.target.style.display = "none"
-                ele.style.display = "block"
-            }
-        })
-    }
+    let check_f = check.parentNode
+    check_f.querySelector(".fa-circle-check").addEventListener("click", (evento) => {
+        if(evento.target.style.display == "block") {
+            evento.target.style.display = "none"
+            check_f.querySelector(".fa-circle").style.display = "block"
+            let check_g = check.parentNode.parentNode
+            let iny = [...check_g.querySelector(".ref").children]
+            iny.forEach(element => {
+                element.classList.remove("rasp")
+            })
+        }
+    })
 
 })
