@@ -115,11 +115,24 @@ function update_() {
 // --- Event Listeners ---
 
 // Mostra/esconde o campo de input para adicionar nova tarefa
-add.addEventListener("click", () => {
+add.addEventListener("click", (evento) => {
     if (task_input.style.bottom === "20%") {
-        task_input.style.bottom = "-100%";
+        task_input.style.bottom = "-200%";
     } else {
         task_input.style.bottom = "20%";
+    }
+
+    let targetParent = evento.target.parentNode
+    const find_modal = document.getElementById("find_modal")
+
+    if(targetParent.className == "btn_x") {
+        targetParent.classList.remove("btn_x")
+        targetParent.classList.add("btn_x1")
+        find_modal.style.display = "block"
+    } else {
+        targetParent.classList.remove("btn_x1")
+        targetParent.classList.add("btn_x")
+        find_modal.style.display = "none"
     }
 });
 
