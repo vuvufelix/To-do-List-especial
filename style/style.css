@@ -99,7 +99,6 @@ body {
 #container > #tasks > .task > #icons {
     display: flex;
     gap: 0.6rem;
-    z-index: 2;
 } 
 
 .rasp::before {
@@ -147,11 +146,10 @@ body {
     margin: auto;
     position: absolute;
     left: 2.5%;
-    bottom: -300%;
-    z-index: 22;
+    bottom: -600%;
     transition: all .6s;
     border: 2px solid var(--color_upgrade);
-
+    z-index: 444;
 }
 
 #container > #task_input > span {

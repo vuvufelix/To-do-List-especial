@@ -3,8 +3,63 @@ const task_input = document.querySelector("#task_input");
 const tasks = document.querySelector("#tasks");
 const tarefa = document.querySelector("#tarefa");
 const btn_add = document.querySelector("#btn_add");
+const time = document.getElementsByTagName("time")[0]
+const mes = document.querySelector("#mes")
+
+const hora = new Date()
+
+const semana = {
+    0: "Domingo",
+    1: "Segunda Feira",
+    2: "Terça Feira",
+    3: "Quarta Feira",
+    4: "Quinta Feira",
+    5: "Sexta Feira",
+    6: "Sábando"
+}
+
+const mes_ = {
+    0: "Janeiro",
+    1: "Fevereiro",
+    2: "Março",
+    3: "Abril",
+    4: "Maio",
+    5: "Junho",
+    6: "Julho",
+    7: "Agosto",
+    8: "Setembro",
+    9: "Outubro",
+    10: "Novembro",
+    11: "Desembro"
+}
+
+time.innerHTML = `${semana[hora.getDay()]} , ${hora.getDate()}`
+mes.innerHTML = mes_[hora.getMonth()]
 
 let tarefas = [];
+
+
+function btn_adicionar() {
+    // Adiciona uma nova tarefa à lista
+    btn_add.addEventListener("click", (evento) => {
+        evento.preventDefault();
+        const textoTarefa = tarefa.value.trim(); // .trim() remove espaços em branco extras
+        
+        if (textoTarefa) {
+            // Cria um ID único usando a data e hora atual
+            const novaTarefa = {
+                id: Date.now(),
+                texto: textoTarefa,
+                concluida: false
+            };
+
+            tarefas.push(novaTarefa);
+            salvarTarefas(); // Salva a array atualizada no localStorage
+            renderizarTarefas(); // Renderiza a lista atualizada
+            tarefa.value = ""; // Limpa o campo de input
+        }
+    });
+}
 
 // --- Funções principais ---
 
@@ -45,6 +100,46 @@ function delete_() {
     })
 }
 
+function update_() {
+    const fa_pen = [...document.querySelectorAll(".fa-pen")]
+    fa_pen.forEach(element => {
+        element.addEventListener("click", (evento) => {
+
+            let def_ = evento.target.parentNode.parentNode
+            
+            let filters = tarefas.find(element => {
+                if(element.id == def_.getAttribute("id")) {
+                    return element
+                }
+            })
+
+            console.log(filters)
+
+            if (task_input.style.bottom === "20%") {
+                task_input.style.bottom = "-600%";
+            } else {
+                task_input.style.bottom = "20%";
+            }
+
+            const textoTarefa = tarefa.value = filters.texto
+
+            //==========
+            btn_add.addEventListener("click", (evento) => {
+                evento.preventDefault();
+                const atualizar = textoTarefa.trim(); // .trim() remove espaços em branco extras
+                
+                if(atualizar != "") {
+                    if(filters) {
+                        filters.texto = atualizar
+                        salvarTarefas()
+                   } 
+                }
+            })
+
+        })
+    })
+}
+
 // Renderiza todas as tarefas na tela
 function renderizarTarefas() {
     // Limpa o conteúdo atual da lista para evitar duplicatas
@@ -72,52 +167,12 @@ function renderizarTarefas() {
     delete_()
 }
 
-function update_() {
-    const fa_pen = [...document.querySelectorAll(".fa-pen")]
-    fa_pen.forEach(element => {
-        element.addEventListener("click", (evento) => {
-
-            let def_ = evento.target.parentNode.parentNode
-            
-            let filters = tarefas.find(element => {
-                if(element.id == def_.getAttribute("id")) {
-                    return element
-                }
-            })
-
-            const textoTarefa = tarefa.value = filters.texto
-
-            if (task_input.style.bottom === "20%") {
-                task_input.style.bottom = "-100%";
-            } else {
-                task_input.style.bottom = "20%";
-            }
-
-            const btn_update = document.querySelector("#btn_update")
-
-            btn_update.addEventListener("click", (evento) => {
-                evento.preventDefault();
-
-                if(filters) {
-
-                    if (textoTarefa) {
-    
-                        filters.texto = textoTarefa
-                        salvarTarefas()
-                    }
-                }
-            })
-
-        })
-    })
-}
-
 // --- Event Listeners ---
 
 // Mostra/esconde o campo de input para adicionar nova tarefa
 add.addEventListener("click", (evento) => {
     if (task_input.style.bottom === "20%") {
-        task_input.style.bottom = "-200%";
+        task_input.style.bottom = "-600%";
     } else {
         task_input.style.bottom = "20%";
     }
@@ -134,27 +189,9 @@ add.addEventListener("click", (evento) => {
         targetParent.classList.add("btn_x")
         find_modal.style.display = "none"
     }
-});
 
-// Adiciona uma nova tarefa à lista
-btn_add.addEventListener("click", (evento) => {
-    evento.preventDefault();
-    const textoTarefa = tarefa.value.trim(); // .trim() remove espaços em branco extras
-    
-    if (textoTarefa) {
-        // Cria um ID único usando a data e hora atual
-        const novaTarefa = {
-            id: Date.now(),
-            texto: textoTarefa,
-            concluida: false
-        };
-
-        tarefas.push(novaTarefa);
-        salvarTarefas(); // Salva a array atualizada no localStorage
-        renderizarTarefas(); // Renderiza a lista atualizada
-        tarefa.value = ""; // Limpa o campo de input
-    }
-});
+    btn_adicionar()
+})
 
 // --- Início do script ---
 // Chama a função para carregar as tarefas quando a página é carregada
