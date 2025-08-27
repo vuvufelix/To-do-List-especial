@@ -5,6 +5,11 @@ const tarefa = document.querySelector("#tarefa");
 const btn_add = document.querySelector("#btn_add");
 const time = document.getElementsByTagName("time")[0]
 const mes = document.querySelector("#mes")
+const container = document.querySelector("#container")
+
+container.addEventListener("click", (evento) => {
+    evento.stopPropagation()
+})
 
 const hora = new Date()
 
@@ -120,7 +125,7 @@ function update_() {
             } else {
                 task_input.style.bottom = "20%";
             }
-
+ 
             const textoTarefa = tarefa.value = filters.texto
 
             //==========
@@ -129,10 +134,11 @@ function update_() {
                 const atualizar = textoTarefa.trim(); // .trim() remove espaços em branco extras
                 
                 if(atualizar != "") {
-                    if(filters) {
-                        filters.texto = atualizar
-                        salvarTarefas()
-                   } 
+                    let pos = tarefas.indexOf(filters)
+                    tarefas[pos].texto = atualizar
+
+                    salvarTarefas()
+                    console.log(textoTarefa)
                 }
             })
 
