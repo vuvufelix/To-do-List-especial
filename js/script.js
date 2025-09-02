@@ -146,12 +146,10 @@ add.addEventListener("click", (evento) => {
         targetParent.classList.add("btn_x")
     }
 
-    if (task_input.style.bottom === "40%") {
-        task_input.style.bottom = "-600%"
+    if (find_modal.style.display == "flex") {
         find_modal.style.display = "none"
     } else {
-        task_input.style.bottom = "40%"
-        find_modal.style.display = "block"
+        find_modal.style.display = "flex"
     }
 
     btn_adicionar()
